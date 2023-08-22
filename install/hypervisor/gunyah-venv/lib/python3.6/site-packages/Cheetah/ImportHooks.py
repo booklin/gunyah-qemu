@@ -1,0 +1,129 @@
+"""
+Provides some import hooks to allow Cheetah's .tmpl files to be imported
+directly like Python .py modules.
+
+To use these:
+  import Cheetah.ImportHooks
+  Cheetah.ImportHooks.install()
+"""
+
+import sys
+import os.path
+import types
+try:
+    import builtins as builtin
+except ImportError:  # PY2
+    import __builtin__ as builtin
+from threading import RLock
+import traceback
+
+from Cheetah import ImportManager
+from Cheetah.ImportManager import DirOwner
+from Cheetah.Compiler import Compiler
+from Cheetah.convertTmplPathToModuleName import convertTmplPathToModuleName
+
+_installed = False
+
+##################################################
+# HELPER FUNCS
+
+_cacheDir = []
+
+
+def setCacheDir(cacheDir):
+    global _cacheDir
+    _cacheDir.append(cacheDir)
+
+##################################################
+# CLASSES
+
+
+class CheetahDirOwner(DirOwner):
+    _lock = RLock()
+    _acquireLock = _lock.acquire
+    _releaseLock = _lock.release
+
+    templateFileExtensions = ('.tmpl',)
+
+    def getmod(self, name):
+        self._acquireLock()
+        try:
+            mod = DirOwner.getmod(self, name)
+            if mod:
+                return mod
+
+            for ext in self.templateFileExtensions:
+                tmplPath = os.path.join(self.path, name + ext)
+                if os.path.exists(tmplPath):
+                    try:
+                        return self._compile(name, tmplPath)
+                    except Exception:
+                        # @@TR: log the error
+                        exc_txt = traceback.format_exc()
+                        exc_txt = '  ' + ('  \n'.join(exc_txt.splitlines()))
+                        raise ImportError(
+                            'Error while compiling Cheetah module '
+                            '%(name)s, original traceback follows:\n'
+                            '%(exc_txt)s' % locals())
+            return None
+
+        finally:
+            self._releaseLock()
+
+    def _compile(self, name, tmplPath):
+        # @@ consider adding an ImportError raiser here
+        code = str(Compiler(file=tmplPath, moduleName=name,
+                            mainClassName=name))
+        if _cacheDir:
+            __file__ = os.path.join(_cacheDir[0],
+                                    convertTmplPathToModuleName(tmplPath)) \
+                       + '.py'
+            try:
+                open(__file__, 'w').write(code)
+            except OSError:
+                # @@ TR: need to add some error code here
+                traceback.print_exc(file=sys.stderr)
+                __file__ = tmplPath
+        else:
+            __file__ = tmplPath
+        co = compile(code+'\n', __file__, 'exec')
+
+        mod = types.ModuleType(name)
+        mod.__file__ = co.co_filename
+        if _cacheDir:
+            # @@TR: this is used in the WebKit filemonitoring code
+            mod.__orig_file__ = tmplPath
+        mod.__co__ = co
+        return mod
+
+
+##################################################
+# FUNCTIONS
+
+def install(templateFileExtensions=('.tmpl',)):
+    """Install the Cheetah Import Hooks"""
+
+    global _installed
+    if not _installed:
+        CheetahDirOwner.templateFileExtensions = templateFileExtensions
+        if isinstance(builtin.__import__, types.BuiltinFunctionType):
+            global __oldimport__
+            __oldimport__ = builtin.__import__
+            ImportManager._globalOwnerTypes.insert(0, CheetahDirOwner)
+            # ImportManager._globalOwnerTypes.append(CheetahDirOwner)
+            global _manager
+            _manager = ImportManager.ImportManager()
+            _manager.setThreaded()
+            _manager.install()
+            _installed = True
+
+
+def uninstall():
+    """Uninstall the Cheetah Import Hooks"""
+    global _installed
+    if _installed:
+        if isinstance(builtin.__import__, types.MethodType):
+            builtin.__import__ = __oldimport__
+            global _manager
+            del _manager
+            _installed = False

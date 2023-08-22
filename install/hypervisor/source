@@ -1,0 +1,5 @@
+export LLVM=$(pwd)/install
+export QEMU=$(pwd)/install/bin/qemu-system-aarch64
+export LOCAL_SYSROOT=$(pwd)/install/hypervisor/c-application-sysroot
+source $(pwd)/install/hypervisor/gunyah-venv/bin/activate
+

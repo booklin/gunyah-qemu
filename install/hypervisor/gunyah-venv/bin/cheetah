@@ -1,0 +1,3 @@
+#!/local/mnt/workspace/gunyah/install/hypervisor/gunyah-venv/bin/python3
+from Cheetah.CheetahWrapper import _cheetah
+_cheetah()

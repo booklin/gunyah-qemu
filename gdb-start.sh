@@ -1,0 +1,21 @@
+gdb-multiarch -q \
+    -ex 'set arch aarch64' \
+    -ex 'set confirm off' \
+    -ex 'target remote localhost:1234' \
+    -ex 'add-symbol-file src/hyp/build/qemu/gunyah-rm-qemu/debug/hyp.elf 0xffffffd5ffe00000' \
+    -ex 'directory src/hyp' \
+    -ex 'break rootvm_init' \
+    -ex 'add-symbol-file src/musl-c-runtime/build/runtime 0x80481000' \
+    -ex 'directory src/musl-c-runtime' \
+    -ex 'break sys_exit' \
+    -ex 'add-symbol-file src/resource-manager/build/qemu/debug/resource-manager 0x804A0000' \
+    -ex 'directory src/resource-manager' \
+    -ex 'tui enable' \
+    -ex 'layout src' \
+    -ex 'layout regs' \
+    -ex 'focus cmd' \
+    -ex 'p/a &hyp_log_buffer' \
+    -ex 'p/a (uint32_t*)((0x8049D000-0x12000+0x1000)+(uint64_t)(&rm_log_area))' \
+    -ex 'break hlos_vm_create' \
+    -ex 'break vm_dt_create_hlos' \
+    -ex 'break memparcel_do_accept'

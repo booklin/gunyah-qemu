@@ -1,0 +1,6 @@
+#!/local/mnt/workspace/gunyah/install/hypervisor/gunyah-venv/bin/python3
+
+from Cheetah import DirectiveAnalyzer
+
+if __name__ == '__main__':
+    DirectiveAnalyzer.main()

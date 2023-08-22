@@ -1,0 +1,2 @@
+#!/bin/sh
+exec "${REALGCC:-aarch64-linux-gnu-gcc}" "$@" -specs "/local/mnt/workspace/gunyah/install/aarch64-linux-gnu/libc/lib/musl-gcc.specs"
