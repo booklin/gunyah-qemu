@@ -13,4 +13,4 @@
 enjoy, any question about this repository, please go to book.
 
 
-if there is no ninjia tool , please sudo apt install ninja-build.
+(if there is no ninjia tool , please sudo apt install ninja-build)
