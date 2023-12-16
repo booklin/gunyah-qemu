@@ -28,3 +28,6 @@ Extra Info:
   3. pip3 install pyelftools==0.26
 ![image](https://github.com/booklin/gunyah-qemu/assets/669266/b264eda4-eaf1-494d-9033-862cbe2c6aae)
 
+* install gdb-multiarch
+* install gnome-terminal
+
