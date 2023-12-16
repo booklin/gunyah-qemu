@@ -14,8 +14,12 @@ enjoy, any question about this repository, please go to book.
 
 
 *if there is no ninjia tool , please sudo apt install ninja-build
+
 *install python3 lib
-pip3 install lark_parser==0.6.6 
-pip3 install Cheetah3==3.1.0 
-pip3 install pyelftools==0.26
+
+  pip3 install lark_parser==0.6.6 
+
+  pip3 install Cheetah3==3.1.0 
+
+  pip3 install pyelftools==0.26
 
