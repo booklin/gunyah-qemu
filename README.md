@@ -11,6 +11,7 @@
 5. Run "run-debug.sh" to lunch the qemu simulator and gdb window for line by line debugging.
 
 enjoy, any question about this repository, please go to book.
+![image](https://github.com/booklin/gunyah-qemu/assets/669266/741df491-2c72-4530-9e1d-c8583c8fe1de)
 
 -------------------------------------------------------------------------
 *if there is no ninjia tool , please sudo apt install ninja-build
