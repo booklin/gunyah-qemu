@@ -14,6 +14,7 @@ enjoy, any question about this repository, please go to book.
 
 -------------------------------------------------------------------------
 *if there is no ninjia tool , please sudo apt install ninja-build
+![image](https://github.com/booklin/gunyah-qemu/assets/669266/28009652-f24a-4783-bc93-262ff7316a73)
 
 *install python3 lib
 
@@ -22,4 +23,5 @@ enjoy, any question about this repository, please go to book.
   2. pip3 install Cheetah3==3.1.0 
 
   3. pip3 install pyelftools==0.26
+![image](https://github.com/booklin/gunyah-qemu/assets/669266/b264eda4-eaf1-494d-9033-862cbe2c6aae)
 
