@@ -16,10 +16,10 @@ enjoy, any question about this repository, please go to book.
 -------------------------------------------------------------------------
 Extra Info:
 
-*if there is no ninjia tool , please sudo apt install ninja-build
+* if there is no ninjia tool , please sudo apt install ninja-build
 ![image](https://github.com/booklin/gunyah-qemu/assets/669266/28009652-f24a-4783-bc93-262ff7316a73)
 
-*install python3 lib
+* install python3 lib
 
   1. pip3 install lark_parser==0.6.6 
 
